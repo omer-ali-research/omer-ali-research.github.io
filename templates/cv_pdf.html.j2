@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <style>
+    @page { margin: 0.65in 0.75in; }
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.35;
+      color: #111;
+    }
+    h1 {
+      font-size: 18pt;
+      font-weight: 600;
+      margin: 0 0 0.25em 0;
+      text-align: center;
+    }
+    .bio {
+      margin: 0.35em auto 0.75em auto;
+      max-width: 36em;
+      text-align: center;
+      font-size: 10pt;
+    }
+    .updated {
+      text-align: center;
+      font-size: 9pt;
+      color: #444;
+      margin-bottom: 1.25em;
+    }
+    h2 {
+      font-size: 11pt;
+      font-weight: 600;
+      margin: 1em 0 0.35em 0;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.15em;
+    }
+    .entry { margin: 0.35em 0 0.55em 0; }
+    .title { font-weight: 600; }
+    em { font-style: italic; }
+    .grant { margin: 0.25em 0; }
+    a { color: #0b57d0; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <h1>{{ meta.name }}</h1>
+  {% if meta.bio %}
+    {% for p in meta.bio %}
+    <p class="bio">{{ p }}</p>
+    {% endfor %}
+  {% endif %}
+  <p class="updated">Updated {{ updated_label }}</p>
+
+{% for sec in sections %}
+  <h2>{{ sec.heading }}</h2>
+
+  {% if sec.kind == 'publication' %}
+    {% for item in sec.entries %}
+    <div class="entry">
+      {% if item.url %}<a href="{{ item.url }}">{{ item.title }}</a>{% else %}<span class="title">{{ item.title }}</span>{% endif %}{% if item.coauthors %}, {{ item.coauthors }}{% endif %}.
+      <em>{{ item.venue }}</em>, {{ item.year }}.
+    </div>
+    {% endfor %}
+
+  {% elif sec.kind == 'working_paper' %}
+    {% for item in sec.entries %}
+    <div class="entry">
+      {% if item.url %}<a href="{{ item.url }}">{{ item.title }}</a>{% else %}<span class="title">{{ item.title }}</span>{% endif %}{% if item.coauthors %}, {{ item.coauthors }}{% endif %}.
+    </div>
+    {% endfor %}
+
+  {% elif sec.kind == 'wip' %}
+    {% for item in sec.entries %}
+    <div class="entry">
+      <span class="title">{{ item.title }}</span>{% if item.coauthors %} {{ item.coauthors }}{% endif %}.
+    </div>
+    {% endfor %}
+
+  {% elif sec.kind == 'teaching' %}
+    {% for item in sec.entries %}
+    <div class="entry"><span class="title">{{ item.course }}</span> — {{ item.detail }}</div>
+    {% endfor %}
+
+  {% elif sec.kind == 'grant' %}
+    {% for item in sec.entries %}
+    <div class="grant">{{ item.text }}</div>
+    {% endfor %}
+
+  {% endif %}
+{% endfor %}
+
+</body>
+</html>
