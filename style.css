@@ -139,9 +139,29 @@ a:hover {
     color: #24292e;
 }
 
-/* Teaching */
+/* Teaching — course left, dates right (like CV education rows) */
 .teaching {
     margin-bottom: 20px;
+}
+
+.teaching.teaching-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.25rem;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.teaching-course {
+    flex: 1;
+    min-width: 0;
+}
+
+.teaching-dates {
+    flex-shrink: 0;
+    white-space: nowrap;
+    text-align: right;
 }
 
 .teaching p {
