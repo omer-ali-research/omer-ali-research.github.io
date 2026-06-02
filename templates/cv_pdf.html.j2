@@ -23,6 +23,15 @@
       line-height: 1.28;
       color: #111;
     }
+    .cv-doc-label {
+      font-size: 11pt;
+      font-weight: 700;
+      margin: 0 0 0.35em 0;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.055em;
+      font-family: 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
+    }
     h1 {
       font-size: 15.5pt;
       font-weight: 700;
@@ -38,13 +47,14 @@
       text-align: center;
       text-transform: uppercase;
       letter-spacing: 0.055em;
-      /* margin-top: space between sections (~ +½ body line from prior 1.45em) */
-      margin: 2.1em 0 0.48em 0;
+      /* margin-top: space between sections; margin-bottom: +½ line after heading */
+      margin: 2.1em 0 1.12em 0;
       padding-bottom: 0;
       border-bottom: none;
     }
+    /* One extra line of space before the first section (contact information). */
     h2:first-of-type {
-      margin-top: 0.92em;
+      margin-top: 2.2em;
     }
     .contact-block {
       text-align: left;
@@ -111,6 +121,7 @@
 </head>
 <body>
 
+  <p class="cv-doc-label">CURRICULUM VITAE</p>
   <h1>{{ meta.name }}</h1>
 
 {% for sec in sections %}

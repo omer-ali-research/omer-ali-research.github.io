@@ -83,11 +83,11 @@ def render_pdf(html: str, pdf_path: Path) -> None:
 
 
 def set_pdf_title(pdf_path: Path, title: str) -> None:
-    """Write the title to both the document info dict and an XMP packet.
+    """Set PDF title metadata and tell viewers to show it in the window/tab.
 
-    WeasyPrint sets /Title in the info dict but emits no XMP. Safari, macOS
-    Preview, and some Chrome builds read the XMP dc:title, so without it the
-    tab shows "untitled". pikepdf creates the XMP packet and keeps both in sync.
+    WeasyPrint writes /Title from <title> but does not set ViewerPreferences
+    /DisplayDocTitle. Chrome and Safari often show "untitled" or the filename
+    unless that flag is true. Also write XMP dc:title for readers that prefer it.
     """
     try:
         import pikepdf
@@ -99,6 +99,9 @@ def set_pdf_title(pdf_path: Path, title: str) -> None:
         with pdf.open_metadata() as meta:
             meta["dc:title"] = title
         pdf.docinfo[pikepdf.Name.Title] = title
+        pdf.Root["/ViewerPreferences"] = pikepdf.Dictionary(
+            {"/DisplayDocTitle": True}
+        )
         pdf.save(pdf_path)
 
 
