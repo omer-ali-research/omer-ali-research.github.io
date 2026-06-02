@@ -16,6 +16,8 @@ DATA_PATH = ROOT / "_data" / "profile.yml"
 TEMPLATE_DIR = ROOT / "templates"
 OUT_DIR = ROOT / "files"
 CV_NAME = "omer_cv.pdf"
+# Browser-tab / document title for the generated PDF (kept lowercase by request).
+CV_TITLE = "omer cv"
 DEFAULT_SITE_BASE = "https://omer-ali-research.github.io"
 
 
@@ -77,6 +79,27 @@ def render_pdf(html: str, pdf_path: Path) -> None:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     HTML(string=html, base_url=str(ROOT.as_uri()) + "/").write_pdf(pdf_path)
+    set_pdf_title(pdf_path, CV_TITLE)
+
+
+def set_pdf_title(pdf_path: Path, title: str) -> None:
+    """Write the title to both the document info dict and an XMP packet.
+
+    WeasyPrint sets /Title in the info dict but emits no XMP. Safari, macOS
+    Preview, and some Chrome builds read the XMP dc:title, so without it the
+    tab shows "untitled". pikepdf creates the XMP packet and keeps both in sync.
+    """
+    try:
+        import pikepdf
+    except ImportError as e:
+        print("Install deps: pip install -r scripts/requirements.txt", file=sys.stderr)
+        raise e
+
+    with pikepdf.open(pdf_path, allow_overwriting_input=True) as pdf:
+        with pdf.open_metadata() as meta:
+            meta["dc:title"] = title
+        pdf.docinfo[pikepdf.Name.Title] = title
+        pdf.save(pdf_path)
 
 
 def main() -> None:
@@ -108,6 +131,7 @@ def main() -> None:
         meta=meta,
         sections=sections,
         updated_label=updated,
+        cv_title=CV_TITLE,
     )
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)

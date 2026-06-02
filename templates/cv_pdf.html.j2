@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>omer cv</title>
+  <title>{{ cv_title }}</title>
   {# Reference CV used Adobe Garamond (embedded in PDF). We use EB Garamond from Google Fonts — same classical family, licensed for web/PDF generation. For Adobe's files verbatim, you’d add licensed .otf + @font-face. #}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,11 +30,10 @@
       text-align: center;
       font-family: 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
     }
-    /* All caps + tracking read heavier than body even at 400; forbid faux-bold */
+    /* Section titles are the only bold text on the CV. */
     h2 {
       font-size: 11pt;
-      font-weight: 400 !important;
-      font-synthesis: none;
+      font-weight: 700;
       font-family: 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
       text-align: center;
       text-transform: uppercase;
@@ -76,7 +75,7 @@
       margin: 0.38em 0 0.52em 0;
     }
     .pub-title, .wp-title, .wip-title {
-      font-weight: 600;
+      font-weight: 400;
     }
     .pub-authors, .wp-authors, .wip-authors {
       margin: 0.12em 0 0 0;
@@ -140,7 +139,7 @@
   {% elif sec.kind == 'education' %}
     {% for item in sec.entries %}
     <div class="cv-row edu-row">
-      <span class="cv-edu-left"><strong>{{ item.degree }}</strong>{% if item.distinction %} {{ item.distinction }}{% endif %}, <em>{{ item.institution }}</em></span>
+      <span class="cv-edu-left">{{ item.degree }}{% if item.distinction %} {{ item.distinction }}{% endif %}, <em>{{ item.institution }}</em></span>
       <span class="cv-right">{{ item.year }}</span>
     </div>
     {% endfor %}
@@ -174,7 +173,7 @@
   {% elif sec.kind == 'teaching' %}
     {% for item in sec.entries %}
     <div class="cv-row teaching-row">
-      <span class="cv-left"><strong>{{ item.course }}</strong></span>
+      <span class="cv-left">{{ item.course }}</span>
       <span class="cv-right">{{ item.detail }}</span>
     </div>
     {% endfor %}
